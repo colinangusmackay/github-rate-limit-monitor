@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <title>GitHub Rate Limit Info</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+</head>
+
+<body>
+<div class="container text-bg-dark">
+    <header class="">
+        <form class="p-3">
+            <div class="row">
+                <div class="col-3 text-end">
+                    <label for="personalAccessToken">Personal Access Token</label>
+                </div>
+                <div class="col">
+                    <input type="password" id="personalAccessToken" class="form-control" aria-describedby="patHelp"/>
+                    <span id="patHelp" class="form-text">Your personal access token can be generated from the <a href="https://github.com/settings/tokens">Developer Settings</a> on your GitHub profile.</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 text-end">
+                    <label for="user">User Name</label>
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <span class="input-group-text">@</span>
+                        <input type="text" id="user" class="form-control" aria-describedby="userHelp"/>
+                    </div>
+                    <span id="userHelp" class="form-text">Your user name is required by the api to assist identification if problems arise.</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-auto">
+                    <button type="button" class="btn btn-success" onclick="updateRateLimitInfo()">Display Rate Limit</button>
+                </div>
+                <div class="col">&nbsp;</div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-primary" onclick="saveInLocalStorage()">Save in Local Storage</button>
+                </div>
+            </div>
+        </form>
+    </header>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+<script src="index.js"></script>
+</body>
+</html>

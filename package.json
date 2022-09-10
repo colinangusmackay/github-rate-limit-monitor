@@ -1,0 +1,24 @@
+{
+  "name": "github-rate-limit-monitor",
+  "version": "1.0.0",
+  "description": "A quick page to show the github rate limit",
+  "main": "index.html",
+  "scripts": {
+    "server": "http-server . -c-1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colinangusmackay/github-rate-limit-monitor.git"
+  },
+  "keywords": [
+    "github",
+    "rate-limit",
+    "display"
+  ],
+  "author": "Colin Angus Mackay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/colinangusmackay/github-rate-limit-monitor/issues"
+  },
+  "homepage": "https://github.com/colinangusmackay/github-rate-limit-monitor#readme"
+}
