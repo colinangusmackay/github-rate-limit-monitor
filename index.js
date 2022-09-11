@@ -1,13 +1,58 @@
 const localStorageKey = "gitHubRateMonitorPat";
+let updateIntervalId = null;
 
 init();
 
+// Called from page
+
+function saveInLocalStorage() {
+    const pat = getAndValidatePat();
+    const user = getAndValidateUser();
+
+    if (pat === null || user === null)
+        return;
+
+    const data = [{name:"default", pat, user}];
+
+    localStorage.setItem(localStorageKey, JSON.stringify(data));
+}
+
+async function stopContinuousUpdate() {
+    clearInterval(updateIntervalId);
+    updateIntervalId = null;
+    document.getElementById("oneTimeUpdate").disabled = false;
+    document.getElementById("stopContinuousUpdate").style.display = "none";
+    document.getElementById("continuousUpdate").style.display = "";
+}
+
+async function updateRateLimitInfoContinuously(){
+    const pat = getAndValidatePat();
+    const user = getAndValidateUser();
+
+    await updateRateLimitInfoImpl(pat, user);
+
+    updateIntervalId = setInterval(updateRateLimitInfoImpl, 30011, pat, user);
+    document.getElementById("oneTimeUpdate").disabled = true;
+    document.getElementById("stopContinuousUpdate").style.display = "";
+    document.getElementById("continuousUpdate").style.display = "none";
+}
+
+async function updateRateLimitInfo(){
+    const pat = getAndValidatePat();
+    const user = getAndValidateUser();
+
+    await updateRateLimitInfoImpl(pat, user)
+}
+
+// Called internally
+
 function init(){
+    document.getElementById("stopContinuousUpdate").style.display = "none";
+
     const json = localStorage.getItem(localStorageKey);
     if (!json)
         return;
 
-    console.log(json);
     const data = JSON.parse(json);
     document.getElementById("personalAccessToken").value = data[0].pat;
     document.getElementById("user").value = data[0].user;
@@ -33,30 +78,17 @@ function getAndValidateUser(){
     return user;
 }
 
-function saveInLocalStorage() {
-    const pat = getAndValidatePat();
-    const user = getAndValidateUser();
-
-    if (pat === null || user === null)
-        return;
-
-    const data = [{name:"default", pat, user}];
-
-    localStorage.setItem(localStorageKey, JSON.stringify(data));
-}
-
-async function updateRateLimitInfo() {
-    const pat = getAndValidatePat();
-    const user = getAndValidateUser();
+async function updateRateLimitInfoImpl(pat, user) {
 
     if (pat === null || user === null)
         return;
 
     const data = await fetchRateData(pat, user);
-    console.log(data);
 
     const dateOptions = {dateStyle: "full", timeStyle:"full"}
-    document.getElementById("lastFetch").innerText = new Date().toLocaleString("en-gb", dateOptions);
+    let lastFetchTime = new Date().toLocaleString("en-gb", dateOptions);
+    console.log(`Updating at ${lastFetchTime}.`);
+    document.getElementById("lastFetch").innerText = lastFetchTime;
 
     let html = "";
     const orderedResources = Object.entries(data.resources)
@@ -71,7 +103,6 @@ async function updateRateLimitInfo() {
         });
     const timeOptions = {hour12:false, hour:"2-digit", minute:"2-digit", second:"2-digit", timeZoneName:"short"};
     for(const [name, values] of orderedResources){
-        console.log(`${name} => ${JSON.stringify(values)}`);
         const friendlyName = name
             .replace("_", " ")
             .replace("_", " ");
@@ -90,7 +121,6 @@ async function updateRateLimitInfo() {
         html += "</td></tr>"
     }
     document.getElementById("renderedData").innerHTML = html;
-    console.log(html);
     document.getElementById("dataDisplay").style.display = "";
 }
 
@@ -105,6 +135,7 @@ async function fetchRateData(pat, user){
         }
     });
 
-    console.log(response);
+    if (response.status !== 200)
+        console.log(response);
     return response.json();
 }

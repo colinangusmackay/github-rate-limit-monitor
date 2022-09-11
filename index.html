@@ -34,11 +34,13 @@
             </div>
             <div class="row">
                 <div class="col-auto">
-                    <button type="button" class="btn btn-success" onclick="updateRateLimitInfo()">Display Rate Limit</button>
+                    <button type="button" class="btn btn-success" onclick="updateRateLimitInfo()" id="oneTimeUpdate">Display Rate Limit</button>
+                    <button type="button" class="btn btn-primary" onclick="updateRateLimitInfoContinuously()" id="continuousUpdate">Update continuously</button>
+                    <button type="button" class="btn btn-primary" onclick="stopContinuousUpdate()" id="stopContinuousUpdate">Stop continuous update</button>
                 </div>
                 <div class="col">&nbsp;</div>
                 <div class="col-auto">
-                    <button type="button" class="btn btn-primary" onclick="saveInLocalStorage()">Save in Local Storage</button>
+                    <button type="button" class="btn btn-secondary" onclick="saveInLocalStorage()">Save in Local Storage</button>
                 </div>
             </div>
         </form>
