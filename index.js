@@ -107,7 +107,13 @@ async function updateRateLimitInfoImpl(pat, user) {
             .replace("_", " ")
             .replace("_", " ");
         const resetTime = new Date(values.reset * 1000).toLocaleTimeString("en-gb", timeOptions);
-        const percent = (values.used / values.remaining).toFixed(0);
+        let percent = values.used / values.limit;
+        const percentText = (percent * 100).toFixed(0);
+        const progressColour = percent >= 0.9
+            ? "danger"
+            : percent > 0.75
+                ? "warning"
+                : "success";
         html += `<tr><td rowspan='2' scope='row'>${friendlyName}</td>`;
         html += `<td>${values.limit}</td>`;
         html += `<td>${values.used}</td>`;
@@ -115,8 +121,8 @@ async function updateRateLimitInfoImpl(pat, user) {
         html += `<td>${resetTime}</td>`;
         html += "</tr>";
         html += "<tr><td colspan='4'>";
-        html += "<div class='progress'>";
-        html += `<div class='progress-bar' role='progressbar' aria-label='Progress of ${friendlyName}' style='width: ${percent}%' aria-valuenow='${values.used}' aria-valuemin='0' aria-valuemax='${values.limit}'>${values.used} of ${values.limit}</div>`;
+        html += "<div class='progress bg-info'>";
+        html += `<div class='progress-bar bg-${progressColour}' role='progressbar' aria-label='Progress of ${friendlyName}' style='width: ${percentText}%' aria-valuenow='${values.used}' aria-valuemin='0' aria-valuemax='${values.limit}'>${values.used} of ${values.limit}</div>`;
         html += "</div>";
         html += "</td></tr>"
     }
